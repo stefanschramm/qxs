@@ -23,13 +23,10 @@ export type RawShortcut = Shortcut & {
 
 // TODO: Support "Short notation" like "examplekeyword 1: http://www.example.com/?q=<param1>"
 
-export type IncludeDefinition = string | SimpleIncludeDefinition | NamespaceIncludeDefinition | IncludeDefinition[];
-
-type SimpleIncludeDefinition = {
-  readonly key: string;
-};
-
-type NamespaceIncludeDefinition = {
-  readonly key: string;
-  readonly namespace: string;
-};
+export type IncludeDefinition =
+  | IncludeDefinition[]
+  | string
+  | {
+      readonly key: string;
+      readonly namespace?: string;
+    };

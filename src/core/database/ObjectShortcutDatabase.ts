@@ -91,20 +91,6 @@ class ShortcutFinder {
     overrideNamespaces: NamespaceSource[] | undefined,
     maxDepth = 10,
   ): Promise<Shortcut | undefined> {
-    if (typeof include === 'string') {
-      // One single shortcut (string notation)
-      return await this.getShortcutBySearchKey(this.mapSearchKey(include), overrideNamespaces, maxDepth);
-    }
-
-    if (typeof include === 'object' && include.key !== undefined) {
-      // One single shortcut (object notation with "key" key)
-      return await this.getShortcutBySearchKey(
-        this.mapSearchKey(include.key),
-        include.namespace ? [include.namespace] : overrideNamespaces,
-        maxDepth,
-      );
-    }
-
     if (include instanceof Array) {
       // List of references by namespace - namespace to search in usually comes from include, not from usual namespace priority list
       for (const includeEntry of include) {
@@ -118,6 +104,20 @@ class ShortcutFinder {
         }
       }
       return undefined;
+    }
+
+    if (typeof include === 'string') {
+      // One single shortcut (string notation)
+      return await this.getShortcutBySearchKey(this.mapSearchKey(include), overrideNamespaces, maxDepth);
+    }
+
+    if (include.key !== undefined) {
+      // One single shortcut (object notation with "key" key)
+      return await this.getShortcutBySearchKey(
+        this.mapSearchKey(include.key),
+        include.namespace ? [include.namespace] : overrideNamespaces,
+        maxDepth,
+      );
     }
 
     throw new DataDefinitionError('Encountered unexpected include definition.');
