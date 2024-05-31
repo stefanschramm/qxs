@@ -1,6 +1,6 @@
 # qxs - QuickXS
 
-qxs is a command line utility that provides access to [trovu.net](https://trovu.net/)'s shortcut database.
+qxs is a command line utility that provides quick access to [trovu.net](https://trovu.net/)'s shortcut database.
 
 ## Installation
 
