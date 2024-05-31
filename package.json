@@ -1,6 +1,6 @@
 {
   "name": "@stefanschramm/qxs",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "QuickXS command line utility",
   "main": "index.js",
   "scripts": {
