@@ -1,0 +1,36 @@
+{
+  "name": "@stefanschramm/qxs",
+  "version": "0.0.3",
+  "description": "QuickXS command line utility",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc ; chmod +x dist/cli/qxs.js",
+    "build-watch": "npx tsc --watch",
+    "test": "npx jest --verbose src/",
+    "coverage": "npx jest --verbose --coverage src/",
+    "lint": "npx eslint src/",
+    "prettier": "npx prettier src/ --check",
+    "prettier-fix": "npx prettier src/ --write"
+  },
+  "type": "module",
+  "bin": {
+    "qxs": "dist/cli/qxs.js"
+  },
+  "author": "Stefan Schramm <mail@stefanschramm.net>",
+  "license": "AGPL-3.0-or-later",
+  "devDependencies": {
+    "@babel/preset-typescript": "^7.24.1",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.12.2",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "prettier": "3.2.5",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.4.4",
+    "typescript-eslint": "^7.5.0"
+  },
+  "dependencies": {
+    "yaml": "^2.4.1"
+  },
+  "files": ["dist"]
+}
