@@ -1,5 +1,6 @@
 import { DataDefinitionError, UsageError } from '../../Error.js';
 import { NamespaceSource } from '../Environment.js';
+import { Logger } from '../Logger.js';
 import { NamespaceDispatcher } from '../namespaces/NamespaceDispatcher.js';
 import { IncludeDefinition, Shortcut } from './Shortcut.js';
 import { ShortcutDatabase } from './ShortcutDatabase.js';
@@ -41,6 +42,8 @@ class ShortcutFinder {
     }
 
     const namespacesToSearchIn = overrideNamespaces === undefined ? this.namespaces : overrideNamespaces;
+
+    Logger.debug(`ShortcutFinder: Searching for "${searchKey}" in ${namespacesToSearchIn.length} namespace(s)`);
 
     for (const namespace of namespacesToSearchIn) {
       const namespaceData = await this.namespaceDispatcher.get(namespace);
@@ -105,6 +108,8 @@ class ShortcutFinder {
       }
       return undefined;
     }
+
+    Logger.debug(`ShortcutFinder: Processing include: ${JSON.stringify(include)}`);
 
     if (typeof include === 'string') {
       // One single shortcut (string notation)
