@@ -25,6 +25,7 @@ async function main(): Promise<void> {
   // --output - Just output URL, don't open browser
   // --config "{...}" - Config overlay
   // --verbose Debug
+  // --interactive - Read from stdin; preview result
 
   try {
     // Use all following args to make usage of quotes unnecessary
