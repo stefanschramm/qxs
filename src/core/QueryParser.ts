@@ -14,7 +14,7 @@ export class QueryParser {
     const prefixes = keywordParts.slice(0, keywordParts.length - 1);
 
     // Possibilities for prefixing keywords:
-    // - No prefix: gn 
+    // - No prefix: gn
     // - Language prefix: en.gn
     // - Country prefix: .gb.gn
     // - Country and language prefix: .gb.en.gn
