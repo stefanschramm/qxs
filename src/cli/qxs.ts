@@ -4,7 +4,7 @@ import { QueryProcessingResultStatus, QueryProcessor } from '../core/QueryProces
 import { CliEnvironment } from './CliEnvironment.js';
 import { spawn } from 'child_process';
 import { getCliConfig } from './CliConfig.js';
-import { TrovuError } from '../Error.js';
+import { QxsError } from '../Error.js';
 import { NamespaceDispatcher } from '../core/namespaces/NamespaceDispatcher.js';
 import { ObjectShortcutDatabase } from '../core/database/ObjectShortcutDatabase.js';
 import { InPlaceNamespaceSourceHandler } from '../core/namespaces/InPlaceNamespaceSourceHandler.js';
@@ -22,6 +22,8 @@ async function main(): Promise<void> {
   // --search - Perform a search, similar to trovu.net homepage
   // --show - Display detailed information about a shortcut
   // --output - Just output URL, don't open browser
+  // --config "{...}" - Config overlay
+  // --verbose Debug
 
   try {
     // Use all following args to make usage of quotes unnecessary
@@ -76,7 +78,7 @@ async function main(): Promise<void> {
       }
     }
   } catch (e) {
-    if (e instanceof TrovuError) {
+    if (e instanceof QxsError) {
       console.error(`Error while processing query: ${e.message}`);
     } else {
       console.error(e); // show stack trace for unexpected errors

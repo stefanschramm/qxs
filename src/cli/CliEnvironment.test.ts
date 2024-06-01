@@ -7,7 +7,7 @@ const testCliConfig: CliConfig = {
   language: 'bb',
   browser: 'dontcare',
   shortcutsDir: 'dontcare',
-  singleDataSourceUrl: 'https://trovu.net/data.json',
+  singleDataSourceUrl: 'https://qxs.kesto.de/data.json',
   individualShortcutsBaseUrl: 'https://raw.githubusercontent.com/trovu/trovu/master/data/shortcuts/',
   defaultKeyword: 'g',
 };

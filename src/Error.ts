@@ -1,7 +1,7 @@
-export class TrovuError extends Error {}
+export class QxsError extends Error {}
 
-export class DataDefinitionError extends TrovuError {}
+export class DataDefinitionError extends QxsError {}
 
-export class UsageError extends TrovuError {}
+export class UsageError extends QxsError {}
 
-export class ImplementationError extends TrovuError {}
+export class ImplementationError extends QxsError {}

@@ -12,7 +12,7 @@ export class RemoteSingleJsonNamespaceSourceHandler implements NamespaceSourceHa
   private cache: Record<string, ShortcutSearchKeyMap> = {};
 
   /**
-   * @param url Example: https://trovu.net/data.json
+   * @param url Example: https://qxs.kesto.de/data.json
    */
   public constructor(private readonly url: string) {}
 

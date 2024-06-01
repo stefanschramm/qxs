@@ -45,7 +45,7 @@ export function getCliConfig(configFile: string | undefined = undefined): CliCon
 }
 
 function getDefaultConfigFile(): string {
-  return `${os.homedir()}/.trovu.yml`;
+  return `${os.homedir()}/.qxs.yml`;
 }
 
 function getDefaultConfig(): CliConfig {
@@ -57,7 +57,7 @@ function getDefaultConfig(): CliConfig {
     language: 'de',
     browser: 'open', // TODO: open is xdg-open. Check if this works on other OSes.
     shortcutsDir: `${here}/../../data/shortcuts`,
-    singleDataSourceUrl: 'https://go.kesto.de/data.json',
+    singleDataSourceUrl: 'https://qxs.kesto.de/data.json',
     individualShortcutsBaseUrl: 'https://raw.githubusercontent.com/trovu/trovu/master/data/shortcuts/', // TODO: maybe pattern instead of base url would be better
     defaultKeyword: undefined,
   };
