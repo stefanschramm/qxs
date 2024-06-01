@@ -33,7 +33,7 @@ export class RemoteSingleJsonNamespaceSourceHandler implements NamespaceSourceHa
   }
 
   private async load(): Promise<void> {
-    Logger.debug(`RemoteSingleJsonNamespaceSourceHandler: Loading shortcut data from ${this.url}...`);
+    Logger.debug(`RemoteSingleJsonNamespaceSourceHandler: Loading shortcut data from ${this.url}`);
     const response = await fetch(this.url, { mode: 'no-cors', signal: AbortSignal.timeout(30000) });
     const responseData = await response.json();
     this.cache = responseData['shortcuts'];

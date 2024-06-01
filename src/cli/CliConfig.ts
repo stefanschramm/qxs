@@ -4,7 +4,8 @@ import os from 'os';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { NamespaceSource } from '../core/Environment';
+import { NamespaceSource } from '../core/Environment.js';
+import { Logger } from '../core/Logger.js';
 
 export type CliConfig = {
   readonly browser: string;
@@ -36,6 +37,7 @@ export function getCliConfig(configFile: string | undefined = undefined): CliCon
   if (effectiveConfigFile === undefined) {
     return getDefaultConfig();
   }
+  Logger.debug(`CliConfig: Loading ${effectiveConfigFile}`);
   const additionalConfiguration = yaml.parse(fs.readFileSync(effectiveConfigFile).toString());
 
   return {

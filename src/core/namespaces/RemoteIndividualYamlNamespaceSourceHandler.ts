@@ -2,6 +2,7 @@ import { NamespaceSource, ShortcutSearchKeyMap } from '../Environment.js';
 import { NamespaceSourceHandler } from './NamespaceDispatcher.js';
 import { DataDefinitionError, ImplementationError, UsageError } from '../../Error.js';
 import yaml from 'yaml';
+import { Logger } from '../Logger.js';
 
 /**
  * Handler for official namespaces
@@ -35,7 +36,7 @@ export class RemoteIndividualYamlNamespaceSourceHandler implements NamespaceSour
   private async load(namespace: string): Promise<void> {
     try {
       const url = `${this.baseUrl}/${namespace}.yml`;
-      console.log(`Loading ${url}...`);
+      Logger.debug(`RemoteIndividualYamlNamespaceSourceHandler: Loading ${url}`);
       const response = await fetch(url);
       const content = await response.text();
       const namespaceData = yaml.parse(content);

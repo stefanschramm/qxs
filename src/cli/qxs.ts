@@ -11,6 +11,7 @@ import { InPlaceNamespaceSourceHandler } from '../core/namespaces/InPlaceNamespa
 import { UrlNamespaceSourceHandler } from '../core/namespaces/UrlNamespaceSourceHandler.js';
 import { GithubNamespaceSourceHandler } from '../core/namespaces/GithubNamespaceSourceHandler.js';
 import { RemoteSingleJsonNamespaceSourceHandler } from '../core/namespaces/RemoteSingleJsonNamespaceSourceHandler.js';
+import { Logger } from '../core/Logger.js';
 
 async function main(): Promise<void> {
   if (process.argv.length < 3) {
@@ -43,7 +44,7 @@ async function main(): Promise<void> {
     const shortcutDatabase = new ObjectShortcutDatabase(namespaceDispatcher);
     const queryProcessor = new QueryProcessor(cliEnvironment, shortcutDatabase);
 
-    console.log(`Processing query "${query}"...`);
+    Logger.debug(`Processing query "${query}"...`);
     const result = await queryProcessor.process(query);
 
     switch (result.status) {
@@ -52,7 +53,7 @@ async function main(): Promise<void> {
           console.error(`No url returned.`);
           return;
         }
-        console.log(`Opening ${result.url}`);
+        Logger.debug(`Opening ${result.url}`);
         const process = spawn(cliConfig.browser, [result.url], {
           detached: true,
           stdio: ['ignore', 'ignore', 'ignore'],

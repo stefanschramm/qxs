@@ -1,8 +1,10 @@
+import yaml from 'yaml';
 import { type Environment } from './Environment.js';
 import { QueryParser } from './QueryParser.js';
 import { UrlProcessor } from './url/UrlProcessor.js';
 import { DataDefinitionError, UsageError } from '../Error.js';
 import { ShortcutDatabase } from './database/ShortcutDatabase.js';
+import { Logger } from './Logger.js';
 
 export class QueryProcessor {
   constructor(
@@ -24,6 +26,10 @@ export class QueryProcessor {
       parsedQuery.args.length,
       language,
       namespaces,
+    );
+
+    Logger.debug(
+      `QueryProcessor: Shortcut database returned:\n-----\n${yaml.stringify(shortcut, { lineWidth: 0 })}-----`,
     );
 
     if (shortcut === undefined) {
