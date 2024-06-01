@@ -45,7 +45,8 @@ class ShortcutFinder {
 
     Logger.debug(`ShortcutFinder: Searching for "${searchKey}" in ${namespacesToSearchIn.length} namespace(s)`);
 
-    for (const namespace of namespacesToSearchIn) {
+    // Iterate in reverse order because namespacesToSearchIn has the lowest priority first.
+    for (const namespace of namespacesToSearchIn.slice().reverse()) {
       const namespaceData = await this.namespaceDispatcher.get(namespace);
       if (namespaceData === undefined) {
         throw new UsageError(`Namespace "${namespace}" not found.`);
