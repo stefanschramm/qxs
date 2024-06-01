@@ -28,9 +28,11 @@ export class QueryProcessor {
       namespaces,
     );
 
-    Logger.debug(
-      `QueryProcessor: Shortcut database returned:\n-----\n${yaml.stringify(shortcut, { lineWidth: 0 })}-----`,
-    );
+    if (shortcut !== undefined) {
+      Logger.debug(
+        `QueryProcessor: Shortcut database returned:\n-----\n${yaml.stringify(shortcut, { lineWidth: 0 })}-----`,
+      );
+    }
 
     if (shortcut === undefined) {
       const defaultKeyword = this.environment.getDefaultKeyword();

@@ -1,5 +1,6 @@
 import { DataDefinitionError, ImplementationError, UsageError } from '../../Error.js';
 import { NamespaceSource, ShortcutSearchKeyMap } from '../Environment.js';
+import { Logger } from '../Logger.js';
 import { NamespaceSourceHandler } from './NamespaceDispatcher.js';
 import yaml from 'yaml';
 
@@ -24,6 +25,7 @@ export class UrlNamespaceSourceHandler implements NamespaceSourceHandler {
 
   private async load(url: string): Promise<void> {
     try {
+      Logger.debug(`UrlNamespaceSourceHandler: Loading shortcut data from ${url}`);
       const response = await fetch(url);
       const namespaceData = yaml.parse(await response.text());
       this.cache[url] = namespaceData;

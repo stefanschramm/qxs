@@ -1,5 +1,6 @@
 import { DataDefinitionError, ImplementationError, UsageError } from '../../Error.js';
 import { NamespaceSource, ShortcutSearchKeyMap } from '../Environment.js';
+import { Logger } from '../Logger.js';
 import { NamespaceSourceHandler } from './NamespaceDispatcher.js';
 import yaml from 'yaml';
 
@@ -25,6 +26,7 @@ export class GithubNamespaceSourceHandler implements NamespaceSourceHandler {
   private async load(username: string): Promise<void> {
     try {
       const url = `https://raw.githubusercontent.com/${username}/trovu-data-user/master/shortcuts.yml`;
+      Logger.debug(`GithubNamespaceSourceHandler: Loading shortcut data from ${url}`);
       const response = await fetch(url);
       const namespaceData = yaml.parse(await response.text());
       this.cache[username] = namespaceData;
