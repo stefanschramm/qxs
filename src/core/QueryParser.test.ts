@@ -13,6 +13,21 @@ test('parse trims excess spaces in arguments', () => {
   });
 });
 
+test('parse extracts country', () => {
+  const query = '.gb.gn Art';
+  const parser = new QueryParser();
+
+  const result = parser.parse(query);
+
+  expect(result).toEqual({
+    additionalNamespaces: [],
+    keyword: 'gn',
+    args: ['Art'],
+    language: undefined,
+    country: 'gb',
+  });
+});
+
 test('parse extracts language', () => {
   const query = 'en.w Hamburg';
   const parser = new QueryParser();
@@ -24,6 +39,21 @@ test('parse extracts language', () => {
     keyword: 'w',
     args: ['Hamburg'],
     language: 'en',
+  });
+});
+
+test('parse extracts country and language', () => {
+  const query = '.gb.de.gn Art';
+  const parser = new QueryParser();
+
+  const result = parser.parse(query);
+
+  expect(result).toEqual({
+    additionalNamespaces: [],
+    keyword: 'gn',
+    args: ['Art'],
+    language: 'de',
+    country: 'gb',
   });
 });
 

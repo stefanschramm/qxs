@@ -15,8 +15,7 @@ export class QueryProcessor {
   public async process(query: string): Promise<QueryProcessingResult> {
     const queryParser = new QueryParser();
     const parsedQuery = queryParser.parse(query);
-    // TODO: Where is country used? - Only in UrlProcesor/PlaceholderProcessor?
-    // const country = parsedQuery.country ?? this.environment.getCountry();
+    const country = parsedQuery.country ?? this.environment.getCountry();
     const language = parsedQuery.language ?? this.environment.getLanguage();
     const allNamespaces = [...this.environment.getNamespaces(), ...parsedQuery.additionalNamespaces];
     const namespaces = allNamespaces.filter((value, index) => allNamespaces.indexOf(value) === index); // make unique TODO: does === work for all?
@@ -61,7 +60,7 @@ export class QueryProcessor {
       throw new DataDefinitionError('shortcut.url was undefined although the result was not deprecated!?');
     }
 
-    const urlProcessor = new UrlProcessor(language, this.environment.getCountry());
+    const urlProcessor = new UrlProcessor(language, country);
 
     const targetUrl = urlProcessor.process(shortcut.url, parsedQuery.args);
 
