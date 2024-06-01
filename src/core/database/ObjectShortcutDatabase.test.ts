@@ -34,7 +34,7 @@ test('getShortcut considers namespace priority', async () => {
   });
   const database = new ObjectShortcutDatabase(dispatcher);
 
-  const shortcut = await database.getShortcut('a', 1, 'de', ['second', 'first']);
+  const shortcut = await database.getShortcut('a', 1, 'de', ['first', 'second']);
 
   expect(shortcut).toEqual(secondDummyShortcut);
 });
