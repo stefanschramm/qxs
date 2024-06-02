@@ -1,8 +1,9 @@
 {
   "name": "@stefanschramm/qxs",
-  "version": "0.0.7",
+  "version": "0.0.10",
   "description": "QuickXS command line utility",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "npx tsc ; chmod +x dist/cli/qxs.js",
     "build-watch": "npx tsc --watch",
