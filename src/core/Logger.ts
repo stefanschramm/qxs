@@ -1,5 +1,4 @@
-const defaultVerbosity = 3;
-// const defaultVerbosity = 1;
+const defaultVerbosity = 0;
 let verbosity = defaultVerbosity;
 let handler = console;
 

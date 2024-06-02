@@ -19,11 +19,15 @@ async function main(): Promise<void> {
     return;
   }
 
+  // Logger.setVerbosity(1);
+  Logger.setVerbosity(1);
+
   // TODO: add useful command line options (commander.js). Examples:
   // --search - Perform a search, similar to trovu.net homepage
   // --show - Display detailed information about a shortcut
   // --output - Just output URL, don't open browser
   // --config "{...}" - Config overlay
+  // --configFile "..." - Config file path
   // --verbose Debug
   // --interactive - Read from stdin; preview result
 
@@ -54,7 +58,7 @@ async function main(): Promise<void> {
           console.error(`No url returned.`);
           return;
         }
-        Logger.debug(`Opening ${result.url}`);
+        Logger.info(`Opening ${result.url}`);
         const process = spawn(cliConfig.browser, [result.url], {
           detached: true,
           stdio: ['ignore', 'ignore', 'ignore'],
@@ -75,7 +79,7 @@ async function main(): Promise<void> {
       }
 
       case QueryProcessingResultStatus.NotFound: {
-        console.error('Command not found.');
+        Logger.error('Command not found.');
         break;
       }
     }
