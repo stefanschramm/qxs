@@ -19,6 +19,12 @@ qxs bvg Alexanderplatz, Hermannplatz
 qxs yt kitten
 ```
 
+To get a list of available command line options call
+
+```
+qxs --help
+```
+
 ## Configuration
 
 To configure namespaces, language and country, create a `~/.qxs.yml` with the following content (example):

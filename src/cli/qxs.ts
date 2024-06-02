@@ -4,7 +4,7 @@ import { QueryProcessingResultStatus, QueryProcessor } from '../core/QueryProces
 import { CliEnvironment } from './CliEnvironment.js';
 import { spawn } from 'child_process';
 import { getCliConfig } from './CliConfig.js';
-import { QxsError } from '../Error.js';
+import { QxsError, UsageError } from '../Error.js';
 import { NamespaceDispatcher } from '../core/namespaces/NamespaceDispatcher.js';
 import { ObjectShortcutDatabase } from '../core/database/ObjectShortcutDatabase.js';
 import { InPlaceNamespaceSourceHandler } from '../core/namespaces/InPlaceNamespaceSourceHandler.js';
@@ -12,6 +12,7 @@ import { UrlNamespaceSourceHandler } from '../core/namespaces/UrlNamespaceSource
 import { GithubNamespaceSourceHandler } from '../core/namespaces/GithubNamespaceSourceHandler.js';
 import { RemoteSingleJsonNamespaceSourceHandler } from '../core/namespaces/RemoteSingleJsonNamespaceSourceHandler.js';
 import { Logger } from '../core/Logger.js';
+import { Command } from 'commander';
 
 async function main(): Promise<void> {
   if (process.argv.length < 3) {
@@ -32,9 +33,28 @@ async function main(): Promise<void> {
   // --interactive - Read from stdin; preview result
 
   try {
+    const program = new Command();
+    program.name('qxs');
+    program.description("quick access to trovu.net's shortcut database");
+    program.argument('<query>');
+    program.option('-v, --verbose', 'Write debug output');
+    program.option('-o, --output', "Write URL to standard output only, don't call browser");
+    program.option('-f, --fetch', 'Fetch URL and write content to standard output');
+    program.passThroughOptions();
+    program.parse();
+
+    const opts = program.opts();
+
+    if (opts['output'] === true && opts['fetch'] === true) {
+      throw new UsageError('Cannot use --output and --fetch options at the same time.');
+    }
+
+    if (opts['verbose'] === true) {
+      Logger.setVerbosity(3);
+    }
+
     // Use all following args to make usage of quotes unnecessary
-    // TODO: Not sure if it's good to use all following args
-    const query = process.argv.slice(2).join(' ');
+    const query = program.args.join(' ');
 
     const cliConfig = getCliConfig();
     const cliEnvironment = new CliEnvironment(cliConfig);
@@ -58,12 +78,13 @@ async function main(): Promise<void> {
           console.error(`No url returned.`);
           return;
         }
-        Logger.info(`Opening ${result.url}`);
-        const process = spawn(cliConfig.browser, [result.url], {
-          detached: true,
-          stdio: ['ignore', 'ignore', 'ignore'],
-        });
-        process.unref();
+        if (opts['output'] === true) {
+          outputUrl(result.url);
+        } else if (opts['fetch'] === true) {
+          await fetchUrl(result.url);
+        } else {
+          openBrowser(result.url, cliConfig.browser);
+        }
         break;
       }
 
@@ -85,11 +106,30 @@ async function main(): Promise<void> {
     }
   } catch (e) {
     if (e instanceof QxsError) {
-      console.error(`Error while processing query: ${e.message}`);
+      console.error(`error: ${e.message}`);
     } else {
       console.error(e); // show stack trace for unexpected errors
     }
   }
+}
+
+function outputUrl(url: string): void {
+  process.stdout.write(url);
+}
+
+async function fetchUrl(url: string): Promise<void> {
+  const response = await fetch(url);
+  const content = await response.text();
+  process.stdout.write(content);
+}
+
+function openBrowser(url: string, browserCommand: string): void {
+  Logger.info(`Opening ${url}`);
+  const process = spawn(browserCommand, [url], {
+    detached: true,
+    stdio: ['ignore', 'ignore', 'ignore'],
+  });
+  process.unref();
 }
 
 await main();

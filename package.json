@@ -32,7 +32,10 @@
     "typescript-eslint": "^7.5.0"
   },
   "dependencies": {
+    "commander": "^12.1.0",
     "yaml": "^2.4.1"
   },
-  "files": ["dist"]
+  "files": [
+    "dist"
+  ]
 }
