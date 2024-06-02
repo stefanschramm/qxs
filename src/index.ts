@@ -18,9 +18,6 @@ export default {
   NamespaceDispatcher,
   RemoteSingleJsonNamespaceSourceHandler,
   UrlNamespaceSourceHandler,
-}
+};
 
-export type {
-  Environment,
-  NamespaceSource,
-}
+export type { Environment, NamespaceSource };
