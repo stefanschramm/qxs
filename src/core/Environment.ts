@@ -28,18 +28,23 @@ export type ShortcutSearchKeyMap = Record<string, RawShortcut>;
  * Common Environment dummy for unit tests
  */
 export class EnvironmentDummy implements Environment {
-  public constructor(private readonly defaultKeyword: string | undefined = undefined) {}
+  public constructor(
+    private readonly defaultKeyword: string | undefined = undefined,
+    private readonly namespaces: NamespaceSource[] = ['o', 'de', '.de'],
+    private readonly country: string = 'de',
+    private readonly language: string = 'de',
+  ) {}
 
   public getNamespaces(): NamespaceSource[] {
-    return ['o', 'de', '.de'];
+    return this.namespaces;
   }
 
   public getCountry(): string {
-    return 'de';
+    return this.country;
   }
 
   public getLanguage(): string {
-    return 'de';
+    return this.language;
   }
 
   public getDefaultKeyword(): string | undefined {

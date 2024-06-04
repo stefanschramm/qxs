@@ -1,7 +1,14 @@
 import { QueryProcessingResultStatus, QueryProcessor } from './QueryProcessor.js';
-import { EnvironmentDummy } from './Environment.js';
+import { Environment, EnvironmentDummy } from './Environment.js';
 import { ShortcutDatabaseDummy } from './database/ShortcutDatabaseDummy.js';
 import { DataDefinitionError } from '../Error.js';
+import yaml from 'yaml';
+import { NamespaceDispatcher } from './namespaces/NamespaceDispatcher.js';
+import { RemoteSingleJsonNamespaceSourceHandler } from './namespaces/RemoteSingleJsonNamespaceSourceHandler.js';
+import { InPlaceNamespaceSourceHandler } from './namespaces/InPlaceNamespaceSourceHandler.js';
+import { UrlNamespaceSourceHandler } from './namespaces/UrlNamespaceSourceHandler.js';
+import { GithubNamespaceSourceHandler } from './namespaces/GithubNamespaceSourceHandler.js';
+import { ObjectShortcutDatabase } from './database/ObjectShortcutDatabase.js';
 
 test('process known keyword', async () => {
   const result = await getQueryProcessor().process('bvg Hermannplatz, Alexanderplatz');
@@ -68,6 +75,52 @@ test('process with non-deprecated shourtcut without url throws exception', async
     expect(error).toBeInstanceOf(DataDefinitionError);
   }
 });
+
+test.skip('trovu compatibility', async () => {
+  const namespaceDispatcher = new NamespaceDispatcher([
+    new RemoteSingleJsonNamespaceSourceHandler(RemoteSingleJsonNamespaceSourceHandler.QXS_DATA_SOURCE),
+    new InPlaceNamespaceSourceHandler(),
+    new UrlNamespaceSourceHandler(),
+    new GithubNamespaceSourceHandler(),
+  ]);
+  const shortcutDatabase = new ObjectShortcutDatabase(namespaceDispatcher);
+
+  const url = 'https://raw.githubusercontent.com/trovu/trovu/master/tests/calls.yml';
+  const response = await fetch(url);
+  const data = await response.text();
+  const tests = yaml.parse(data);
+
+  const successful: string[] = [];
+  const failed: string[] = [];
+  for (const test of tests) {
+    const env = mapEnvironment(test['env']);
+    const queryProcessor = new QueryProcessor(env, shortcutDatabase);
+    try {
+      const result = await queryProcessor.process(test['env']['query']);
+      const success = result.url === test['response']['redirectUrl'];
+      if (success) {
+        successful.push(test['title']);
+      } else {
+        failed.push(test['title'] + ' EXPECTED: ' + test['response']['redirectUrl'] + ' GOT: ' + result.url);
+      }
+    } catch (e) {
+      failed.push(test['title'] + ' EXCEPTION: ' + (e instanceof Error ? e.message : '?'));
+    }
+  }
+
+  expect(failed).toEqual([]);
+}, 30000);
+
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+function mapEnvironment(env: Record<string, any>): Environment {
+  const namespaces = env['namespaces'] ?? ['o', env['language'] ?? 'en', env['country'] ?? '.us'];
+  return new EnvironmentDummy(
+    env['defaultKeyword'],
+    namespaces,
+    env['country']?.substring(1) ?? 'us',
+    env['language'] ?? 'en',
+  );
+}
 
 function getQueryProcessor(defaultKeyword: string | undefined = undefined): QueryProcessor {
   return new QueryProcessor(new EnvironmentDummy(defaultKeyword), new ShortcutDatabaseDummy());

@@ -1,4 +1,4 @@
-import { DataDefinitionError, UsageError } from '../../Error.js';
+import { DataDefinitionError } from '../../Error.js';
 import { NamespaceSource } from '../Environment.js';
 import { Logger } from '../Logger.js';
 import { NamespaceDispatcher } from '../namespaces/NamespaceDispatcher.js';
@@ -55,10 +55,8 @@ class ShortcutFinder {
 
     // Iterate in reverse order because namespacesToSearchIn has the lowest priority first.
     for (const namespace of namespacesToSearchIn.slice().reverse()) {
-      const namespaceData = await this.namespaceDispatcher.get(namespace);
-      if (namespaceData === undefined) {
-        throw new UsageError(`Namespace "${namespace}" not found.`);
-      }
+      // Non-existent namespace will cause a fallback to the next lower priority namespace.
+      const namespaceData = (await this.namespaceDispatcher.get(namespace)) ?? [];
       let shortcut = namespaceData[searchKey];
       if (shortcut === undefined) {
         continue; // look in next namespace

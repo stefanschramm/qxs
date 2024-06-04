@@ -9,6 +9,7 @@ import { Logger } from '../Logger.js';
  * This handler is supposed to be used with Trovu's "copiled" JSON shortcut database
  */
 export class RemoteSingleJsonNamespaceSourceHandler implements NamespaceSourceHandler {
+  public static readonly QXS_DATA_SOURCE = 'https://qxs.kesto.de/data.json';
   private cache: Record<string, ShortcutSearchKeyMap> = {};
 
   /**
