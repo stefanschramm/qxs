@@ -17,10 +17,18 @@ export class ObjectShortcutDatabase implements ShortcutDatabase {
     language: string,
     namespaces: NamespaceSource[],
   ): Promise<Shortcut | undefined> {
-    const searchKey = `${keyword} ${argumentCount}`;
     const finder = new ShortcutFinder(namespaces, this.namespaceDispatcher, language);
 
-    return await finder.getShortcutBySearchKey(searchKey);
+    // If no shourtcut with matching argument count is found, search for next with less arguments.
+    // On URL processing, the excess arguments will be joined into the last one.
+    let result = undefined;
+    while (argumentCount > 0 && result === undefined) {
+      const searchKey = `${keyword} ${argumentCount}`;
+      result = await finder.getShortcutBySearchKey(searchKey);
+      argumentCount--;
+    }
+
+    return result;
   }
 }
 

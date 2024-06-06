@@ -27,6 +27,19 @@ test('getShortcut considers argument count', async () => {
   expect(shortcut).toEqual(secondDummyShortcut);
 });
 
+test('getShortcut automatically reduces argument count when no exact argument count match', async () => {
+  const dispatcher = createNamespaceDispatcher({
+    first: {
+      'a 1': firstDummyShortcut,
+    },
+  });
+  const database = new ObjectShortcutDatabase(dispatcher);
+
+  const shortcut = await database.getShortcut('a', 2, 'de', ['first']);
+
+  expect(shortcut).toEqual(firstDummyShortcut);
+});
+
 test('getShortcut considers namespace priority', async () => {
   const dispatcher = createNamespaceDispatcher({
     first: { 'a 1': firstDummyShortcut },

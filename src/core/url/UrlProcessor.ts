@@ -21,11 +21,19 @@ export class UrlProcessor {
     // normal placeholders with user-provided arguments
     const argumentPlaceholderRe = /<[^>]+>/g;
     const argumentProcessor = new ArgumentPlaceholderProcessor();
-    let i = 0;
-    for (const match of replacedUrl.matchAll(argumentPlaceholderRe)) {
-      const replacement = argumentProcessor.process(match[0], args[i]);
+
+    const placeholders = [...replacedUrl.matchAll(argumentPlaceholderRe)];
+
+    // join excessive arguments into last one
+    const effectiveArguments = args.slice(0, placeholders.length);
+    for (let i = placeholders.length; i < args.length; i++) {
+      effectiveArguments[placeholders.length - 1] += ',' + args[i];
+    }
+
+    for (let i = 0; i < placeholders.length; i++) {
+      const match = placeholders[i];
+      const replacement = argumentProcessor.process(match[0], effectiveArguments[i]);
       replacedUrl = replacedUrl.replace(match[0], encodeURIComponent(replacement));
-      i++;
     }
 
     return replacedUrl;
