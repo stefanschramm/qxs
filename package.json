@@ -1,6 +1,6 @@
 {
   "name": "@stefanschramm/qxs",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "QuickXS command line utility",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
