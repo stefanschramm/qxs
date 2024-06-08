@@ -20,6 +20,9 @@
     "exactOptionalPropertyTypes": true,
     "useDefineForClassFields": true,
     "declaration": true
-  }
+  },
+  "exclude": [
+    "src/**/*.test.ts"
+  ]
 }
 
