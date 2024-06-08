@@ -43,6 +43,7 @@ async function main(): Promise<void> {
     program.option('-o, --output', "Write URL to standard output only, don't call browser");
     program.option('-y, --yaml', "Write YAML of shortcut to standard output only, don't call browser");
     program.option('-f, --fetch', 'Fetch URL and write content to standard output');
+    program.option('-s, --search', 'Do a fulltext search returning similar results as the web interface');
     program.passThroughOptions();
     program.parse();
 
@@ -71,6 +72,17 @@ async function main(): Promise<void> {
     ]);
     const shortcutDatabase = new ObjectShortcutDatabase(namespaceDispatcher);
     const queryProcessor = new QueryProcessor(cliEnvironment, shortcutDatabase);
+
+    if (opts['search'] === true) {
+      const results = await shortcutDatabase.search(
+        query,
+        cliEnvironment.getLanguage(),
+        cliEnvironment.getNamespaces(),
+      );
+      process.stdout.write(yaml.stringify(results));
+
+      return;
+    }
 
     Logger.debug(`Processing query "${query}"...`);
     const result = await queryProcessor.process(query);

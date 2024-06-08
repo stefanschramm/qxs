@@ -30,6 +30,36 @@ export class ObjectShortcutDatabase implements ShortcutDatabase {
 
     return result;
   }
+
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  public async search(
+    query: string,
+    _language: string,
+    namespaces: NamespaceSource[],
+  ): Promise<Record<string, Shortcut>> {
+    const results: Record<string, Shortcut> = {};
+    const normalizedQuery = query.toLowerCase();
+    for (const namespace of namespaces.slice().reverse()) {
+      const namespaceData = (await this.namespaceDispatcher.get(namespace)) ?? [];
+      for (const key in namespaceData) {
+        const shortcut = namespaceData[key];
+        // TODO: process includes
+        if (shortcutMatches(shortcut, normalizedQuery)) {
+          results[key] = shortcut;
+        }
+      }
+    }
+
+    return results;
+  }
+}
+
+function shortcutMatches(shortcut: Shortcut, normalizedQuery: string): boolean {
+  return (
+    (shortcut.title?.toLowerCase().includes(normalizedQuery) ?? false) ||
+    (shortcut.description?.toLowerCase().includes(normalizedQuery) ?? false) ||
+    (shortcut.url?.toLowerCase().includes(normalizedQuery) ?? false)
+  );
 }
 
 class ShortcutFinder {
@@ -39,6 +69,8 @@ class ShortcutFinder {
     /** Language to use when replacing search keys of includes */
     private readonly language: string,
   ) {}
+
+  // TODO: getShortcutsByFulltextSearch
 
   public async getShortcutBySearchKey(
     searchKey: string,
