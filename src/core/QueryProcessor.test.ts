@@ -90,17 +90,27 @@ test.skip('trovu compatibility', async () => {
   const data = await response.text();
   const tests = yaml.parse(data);
 
-  const successful: string[] = [];
+  const skippedTests = [
+    // TODO: replacing date or cities is currently not implemented
+    'db 4',
+    '.de.db 4',
+    'gd 2 with city mapping',
+    'gd 2 with city mapping from france',
+    // trovu-webinterface-only
+    'reload with query',
+  ];
+
   const failed: string[] = [];
   for (const test of tests) {
+    if (skippedTests.includes(test['title'])) {
+      continue;
+    }
     const env = mapEnvironment(test['env']);
     const queryProcessor = new QueryProcessor(env, shortcutDatabase);
     try {
       const result = await queryProcessor.process(test['env']['query']);
       const success = result.url === test['response']['redirectUrl'];
-      if (success) {
-        successful.push(test['title']);
-      } else {
+      if (!success) {
         failed.push(test['title'] + ' EXPECTED: ' + test['response']['redirectUrl'] + ' GOT: ' + result.url);
       }
     } catch (e) {
@@ -113,13 +123,8 @@ test.skip('trovu compatibility', async () => {
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 function mapEnvironment(env: Record<string, any>): Environment {
-  const namespaces = env['namespaces'] ?? ['o', env['language'] ?? 'en', env['country'] ?? '.us'];
-  return new EnvironmentDummy(
-    env['defaultKeyword'],
-    namespaces,
-    env['country']?.substring(1) ?? 'us',
-    env['language'] ?? 'en',
-  );
+  const namespaces = env['namespaces'] ?? ['o', env['language'] ?? 'en', '.' + env['country'] ?? '.us'];
+  return new EnvironmentDummy(env['defaultKeyword'], namespaces, env['country'] ?? 'us', env['language'] ?? 'en');
 }
 
 function getQueryProcessor(defaultKeyword: string | undefined = undefined): QueryProcessor {

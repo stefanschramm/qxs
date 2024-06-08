@@ -26,6 +26,7 @@ export class QueryParser {
       if (prefixes[0].length === 2) {
         // If there was a leading '.' and the first prefix has 2 letters, its the country.
         country = prefixes.shift();
+        additionalNamespaces.push(`.${country}`);
       }
     }
 
@@ -33,10 +34,10 @@ export class QueryParser {
       if (prefix.length === 2 && language === undefined) {
         // The frist (non-country) prefix with two letters is the language.
         language = prefix;
-      } else {
-        // All other prefixes are usual namespaces (like dictionary or custom)
-        additionalNamespaces.push(prefix);
       }
+      // All other prefixes are usual namespaces (like dictionary or custom)
+      // Language is used as additional namespace too
+      additionalNamespaces.push(prefix);
     }
 
     return {

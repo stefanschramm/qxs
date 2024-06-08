@@ -20,7 +20,7 @@ test('parse extracts country', () => {
   const result = parser.parse(query);
 
   expect(result).toEqual({
-    additionalNamespaces: [],
+    additionalNamespaces: ['.gb'],
     keyword: 'gn',
     args: ['Art'],
     language: undefined,
@@ -35,7 +35,7 @@ test('parse extracts language', () => {
   const result = parser.parse(query);
 
   expect(result).toEqual({
-    additionalNamespaces: [],
+    additionalNamespaces: ['en'],
     keyword: 'w',
     args: ['Hamburg'],
     language: 'en',
@@ -49,7 +49,7 @@ test('parse extracts country and language', () => {
   const result = parser.parse(query);
 
   expect(result).toEqual({
-    additionalNamespaces: [],
+    additionalNamespaces: ['.gb', 'de'],
     keyword: 'gn',
     args: ['Art'],
     language: 'de',
@@ -64,7 +64,7 @@ test('parse extracts additional namespaces', () => {
   const result = parser.parse(query);
 
   expect(result).toEqual({
-    additionalNamespaces: ['blah'],
+    additionalNamespaces: ['en', 'blah'],
     keyword: 'w',
     args: ['Hamburg'],
     language: 'en',
