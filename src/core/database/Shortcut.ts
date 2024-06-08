@@ -10,6 +10,7 @@ export type Shortcut = {
     };
     readonly created: string;
   };
+  readonly description?: string;
   // TODO: other properties?
 };
 

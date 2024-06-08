@@ -13,6 +13,7 @@ import { GithubNamespaceSourceHandler } from '../core/namespaces/GithubNamespace
 import { RemoteSingleJsonNamespaceSourceHandler } from '../core/namespaces/RemoteSingleJsonNamespaceSourceHandler.js';
 import { Logger } from '../core/Logger.js';
 import { Command } from 'commander';
+import { Shortcut } from '../core/database/Shortcut.js';
 
 import yaml from 'yaml';
 
@@ -43,6 +44,7 @@ async function main(): Promise<void> {
     program.option('-o, --output', "Write URL to standard output only, don't call browser");
     program.option('-y, --yaml', "Write YAML of shortcut to standard output only, don't call browser");
     program.option('-f, --fetch', 'Fetch URL and write content to standard output');
+    program.option('-s, --search', 'Do a fulltext search returning similar results as the web interface');
     program.passThroughOptions();
     program.parse();
 
@@ -71,6 +73,22 @@ async function main(): Promise<void> {
     ]);
     const shortcutDatabase = new ObjectShortcutDatabase(namespaceDispatcher);
     const queryProcessor = new QueryProcessor(cliEnvironment, shortcutDatabase);
+
+    if (opts['search'] === true) {
+      const results = await shortcutDatabase.search(
+        query,
+        cliEnvironment.getLanguage(),
+        cliEnvironment.getNamespaces(),
+      );
+
+      if (opts['yaml'] === true) {
+        process.stdout.write(yaml.stringify(results));
+      } else {
+        outputSearchResults(results);
+      }
+
+      return;
+    }
 
     Logger.debug(`Processing query "${query}"...`);
     const result = await queryProcessor.process(query);
@@ -120,6 +138,30 @@ async function main(): Promise<void> {
 
 function outputUrl(url: string): void {
   process.stdout.write(url);
+}
+
+function outputSearchResults(shortcuts: Record<string, Shortcut>) {
+  // TODO: Put placeholder logic somewhere else
+  const argumentPlaceholderRe = /<([^>$]+)>/g;
+  for (const k in shortcuts) {
+    const s = shortcuts[k];
+    if (s.url === undefined) {
+      continue;
+    }
+
+    const args = [];
+    for (const m of s.url.matchAll(argumentPlaceholderRe)) {
+      args.push(m[1]);
+    }
+
+    const keyword = k.split(' ')[0];
+
+    process.stdout.write(`${keyword} ${args.join(', ')}\n`);
+    process.stdout.write(`${s.title}\n`);
+    process.stdout.write(`URL: ${s.url}\n`);
+    process.stdout.write(`Tags: ${s.tags?.join(', ')}\n`);
+    process.stdout.write(`\n`);
+  }
 }
 
 async function fetchUrl(url: string): Promise<void> {
