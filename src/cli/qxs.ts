@@ -14,6 +14,8 @@ import { RemoteSingleJsonNamespaceSourceHandler } from '../core/namespaces/Remot
 import { Logger } from '../core/Logger.js';
 import { Command } from 'commander';
 
+import yaml from 'yaml';
+
 async function main(): Promise<void> {
   if (process.argv.length < 3) {
     console.error(`Usage: qxs <command>`);
@@ -39,6 +41,7 @@ async function main(): Promise<void> {
     program.argument('<query>');
     program.option('-v, --verbose', 'Write debug output');
     program.option('-o, --output', "Write URL to standard output only, don't call browser");
+    program.option('-y, --yaml', "Write YAML of shortcut to standard output only, don't call browser");
     program.option('-f, --fetch', 'Fetch URL and write content to standard output');
     program.passThroughOptions();
     program.parse();
@@ -80,6 +83,8 @@ async function main(): Promise<void> {
         }
         if (opts['output'] === true) {
           outputUrl(result.url);
+        } else if (opts['yaml'] === true) {
+          process.stdout.write(yaml.stringify(result.shortcut));
         } else if (opts['fetch'] === true) {
           await fetchUrl(result.url);
         } else {

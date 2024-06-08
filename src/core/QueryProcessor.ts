@@ -5,6 +5,7 @@ import { UrlProcessor } from './url/UrlProcessor.js';
 import { DataDefinitionError, UsageError } from '../Error.js';
 import { ShortcutDatabase } from './database/ShortcutDatabase.js';
 import { Logger } from './Logger.js';
+import { Shortcut } from './database/Shortcut.js';
 
 export class QueryProcessor {
   constructor(
@@ -67,6 +68,7 @@ export class QueryProcessor {
     return {
       status: QueryProcessingResultStatus.Success,
       url: targetUrl,
+      shortcut: shortcut,
     };
   }
 
@@ -94,6 +96,7 @@ export class QueryProcessor {
     return {
       status: QueryProcessingResultStatus.Success,
       url: targetUrl,
+      shortcut: defaultShortcut,
     };
   }
 }
@@ -101,6 +104,7 @@ export class QueryProcessor {
 type QueryProcessingResult = {
   status: QueryProcessingResultStatus;
   url?: string;
+  shortcut?: Shortcut;
   deprecated?: {
     readonly alternativeQuery?: string | undefined;
     readonly created?: string | undefined;
