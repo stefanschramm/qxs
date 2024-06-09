@@ -2,7 +2,7 @@
 
 qxs is a command line utility that provides quick access to [trovu.net](https://trovu.net/)'s shortcut database.
 
-It tries to re-implement most of Trovu's functionality, however, some more sophisticated features are currently missing.
+It tries to re-implement most of Trovu's functionality, however, some more sophisticated features (like replacing city names or time/date in query placeholders) are currently missing.
 
 ## Installation
 
@@ -36,7 +36,10 @@ namespaces:
 - .de
 language: de
 country: de
+browser: open
 ```
+
+For namespaces, most [configuration options of trovu.net](https://trovu.net/docs/users/advanced/) should work.
 
 ## Uninstalling qxs
 
