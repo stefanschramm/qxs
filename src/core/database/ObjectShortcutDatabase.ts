@@ -22,7 +22,7 @@ export class ObjectShortcutDatabase implements ShortcutDatabase {
     // If no shourtcut with matching argument count is found, search for next with less arguments.
     // On URL processing, the excess arguments will be joined into the last one.
     let result = undefined;
-    while (argumentCount > 0 && result === undefined) {
+    while (argumentCount >= 0 && result === undefined) {
       const searchKey = `${keyword} ${argumentCount}`;
       result = await finder.getShortcutBySearchKey(searchKey);
       argumentCount--;
@@ -30,6 +30,25 @@ export class ObjectShortcutDatabase implements ShortcutDatabase {
 
     return result;
   }
+
+  public async search(
+    query: string,
+    language: string,
+    namespaces: NamespaceSource[],
+  ): Promise<Record<string, Shortcut>> {
+    const finder = new ShortcutFinder(namespaces, this.namespaceDispatcher, language);
+    const normalizedQuery = query.toLowerCase();
+
+    return finder.getShortcutsByFulltextSearch(normalizedQuery);
+  }
+}
+
+function shortcutMatches(shortcut: Shortcut, normalizedQuery: string): boolean {
+  return (
+    (shortcut.title?.toLowerCase().includes(normalizedQuery) ?? false) ||
+    (shortcut.description?.toLowerCase().includes(normalizedQuery) ?? false) ||
+    (shortcut.url?.toLowerCase().includes(normalizedQuery) ?? false)
+  );
 }
 
 class ShortcutFinder {
@@ -81,7 +100,7 @@ class ShortcutFinder {
           // We don't return partial shortcuts (for example title without url would be useless).
           return undefined;
         }
-        delete shortcut['include']; // TODO: clone shortcut. (Otherwise it will probably modify the database because everything are references!)
+        delete shortcut['include'];
         shortcut = {
           ...includedShortcut,
           ...shortcut,
@@ -94,6 +113,35 @@ class ShortcutFinder {
     }
 
     return undefined; // keyword not found
+  }
+
+  public async getShortcutsByFulltextSearch(normalizedQuery: string): Promise<Record<string, Shortcut>> {
+    const results: Record<string, Shortcut> = {};
+    for (const namespace of this.namespaces.slice().reverse()) {
+      const namespaceData = (await this.namespaceDispatcher.get(namespace)) ?? [];
+      for (const key in namespaceData) {
+        let shortcut = { ...namespaceData[key] }; // clone because we don't want to modify the database
+
+        if (shortcut.include !== undefined) {
+          const includedShortcut = await this.getShortcutByIncludeDefinition(shortcut.include, undefined);
+          if (includedShortcut === undefined) {
+            // We don't collect partial shortcuts (for example title without url would be useless).
+            continue;
+          }
+          delete shortcut['include'];
+          shortcut = {
+            ...includedShortcut,
+            ...shortcut,
+          };
+        }
+
+        if (shortcutMatches(shortcut, normalizedQuery)) {
+          results[key] = shortcut;
+        }
+      }
+    }
+
+    return results;
   }
 
   private async getShortcutByIncludeDefinition(

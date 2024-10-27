@@ -11,4 +11,6 @@ export interface ShortcutDatabase {
     language: string,
     namespaces: NamespaceSource[],
   ): Promise<Shortcut | undefined>;
+
+  search(query: string, language: string, namespaces: NamespaceSource[]): Promise<Record<string, Shortcut>>;
 }
