@@ -20,7 +20,10 @@
   "author": "Stefan Schramm",
   "email": "mail@stefanschramm.net",
   "license": "AGPL-3.0-or-later",
-  "repository": "github:stefanschramm/qxs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stefanschramm/qxs.git"
+  },
   "devDependencies": {
     "@babel/preset-typescript": "^7.26.0",
     "@types/jest": "^29.5.14",
