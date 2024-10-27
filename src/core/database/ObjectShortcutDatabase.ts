@@ -22,7 +22,7 @@ export class ObjectShortcutDatabase implements ShortcutDatabase {
     // If no shourtcut with matching argument count is found, search for next with less arguments.
     // On URL processing, the excess arguments will be joined into the last one.
     let result = undefined;
-    while (argumentCount > 0 && result === undefined) {
+    while (argumentCount >= 0 && result === undefined) {
       const searchKey = `${keyword} ${argumentCount}`;
       result = await finder.getShortcutBySearchKey(searchKey);
       argumentCount--;
