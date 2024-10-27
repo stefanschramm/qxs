@@ -123,7 +123,7 @@ test.skip('trovu compatibility', async () => {
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 function mapEnvironment(env: Record<string, any>): Environment {
-  const namespaces = env['namespaces'] ?? ['o', env['language'] ?? 'en', '.' + env['country'] ?? '.us'];
+  const namespaces = env['namespaces'] ?? ['o', env['language'] ?? 'en', '.' + (env['country'] ?? '.us')];
   return new EnvironmentDummy(env['defaultKeyword'], namespaces, env['country'] ?? 'us', env['language'] ?? 'en');
 }
 

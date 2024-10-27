@@ -31,7 +31,6 @@ export class ObjectShortcutDatabase implements ShortcutDatabase {
     return result;
   }
 
-  /* eslint-disable @typescript-eslint/no-unused-vars */
   public async search(
     query: string,
     language: string,
