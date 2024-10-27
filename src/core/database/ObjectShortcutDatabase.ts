@@ -43,7 +43,7 @@ export class ObjectShortcutDatabase implements ShortcutDatabase {
   }
 }
 
-function shortcutMatches(shortcut: Shortcut, normalizedQuery: string): boolean {
+function shortcutFieldMatches(shortcut: Shortcut, normalizedQuery: string): boolean {
   return (
     (shortcut.title?.toLowerCase().includes(normalizedQuery) ?? false) ||
     (shortcut.description?.toLowerCase().includes(normalizedQuery) ?? false) ||
@@ -135,7 +135,7 @@ class ShortcutFinder {
           };
         }
 
-        if (shortcutMatches(shortcut, normalizedQuery)) {
+        if (key.includes(normalizedQuery) || shortcutFieldMatches(shortcut, normalizedQuery)) {
           results[key] = shortcut;
         }
       }
