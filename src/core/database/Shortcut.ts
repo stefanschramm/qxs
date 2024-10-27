@@ -4,6 +4,7 @@
 export type Shortcut = {
   readonly url?: string;
   readonly title?: string;
+  readonly tags?: string[];
   readonly deprecated?: {
     readonly alternative?: {
       readonly query: string;
