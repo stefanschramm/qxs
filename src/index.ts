@@ -8,6 +8,7 @@ import { InPlaceNamespaceSourceHandler } from './core/namespaces/InPlaceNamespac
 import { NamespaceDispatcher } from './core/namespaces/NamespaceDispatcher';
 import { RemoteSingleJsonNamespaceSourceHandler } from './core/namespaces/RemoteSingleJsonNamespaceSourceHandler';
 import { UrlNamespaceSourceHandler } from './core/namespaces/UrlNamespaceSourceHandler';
+import { getArgumentPlaceholderNames } from './core/url/PlaceholderExtractor';
 
 // Temporary API for usage in qxs-web. Not expected to be stable!
 
@@ -21,6 +22,7 @@ export default {
   RemoteSingleJsonNamespaceSourceHandler,
   UrlNamespaceSourceHandler,
   Logger,
+  getArgumentPlaceholderNames,
 };
 
 export type { Environment, NamespaceSource, QueryProcessor, Shortcut };

@@ -16,6 +16,7 @@ import { Command } from 'commander';
 import { Shortcut } from '../core/database/Shortcut.js';
 
 import yaml from 'yaml';
+import { getArgumentPlaceholderNames } from '../core/url/PlaceholderExtractor.js';
 
 async function main(): Promise<void> {
   if (process.argv.length < 3) {
@@ -141,18 +142,13 @@ function outputUrl(url: string): void {
 }
 
 function outputSearchResults(shortcuts: Record<string, Shortcut>) {
-  // TODO: Put placeholder logic somewhere else
-  const argumentPlaceholderRe = /<([^>$]+)>/g;
   for (const k in shortcuts) {
     const s = shortcuts[k];
     if (s.url === undefined) {
       continue;
     }
 
-    const args = [];
-    for (const m of s.url.matchAll(argumentPlaceholderRe)) {
-      args.push(m[1]);
-    }
+    const args = getArgumentPlaceholderNames(s.url);
 
     const keyword = k.split(' ')[0];
 
