@@ -17,14 +17,22 @@ test('process replaces country', () => {
   expect(result).toEqual('de');
 });
 
-// TODO: implement functionality
-test.skip('process replaces current time', () => {
-  const processor = new VariablePlaceholderProcessor('en', 'de');
+test('process replaces current time', () => {
+  const fakeNow = new Date('2012-01-31 22:42:13');
+  const processor = new VariablePlaceholderProcessor('en', 'de', fakeNow);
 
-  const result = processor.process('<$now: {output: HH-mm}>');
+  const result = processor.process('<$now: {output: HH:mm:00}>');
 
-  // TODO: actually such a test should use a static clock with a fixed time instead of the system clock
-  expect(result).toMatch(/^[0-9]{2}-[0-9]{2}$/);
+  expect(result).toEqual('22:42:00');
+});
+
+test('process replaces current date', () => {
+  const fakeNow = new Date('2012-01-31 22:42:13');
+  const processor = new VariablePlaceholderProcessor('en', 'de', fakeNow);
+
+  const result = processor.process('<$now: {output: YYYY-MM-DD}>');
+
+  expect(result).toEqual('2012-01-31');
 });
 
 test('process throws exception on unknown variable placeholder', () => {
