@@ -40,7 +40,7 @@ async function main(): Promise<void> {
     const program = new Command();
     program.name('qxs');
     program.description("quick access to trovu.net's shortcut database");
-    program.argument('<query>');
+    program.argument('[query...]');
     program.option('-v, --verbose', 'Write debug output');
     program.option('-o, --output', "Write URL to standard output only, don't call browser");
     program.option('-y, --yaml', "Write YAML of shortcut to standard output only, don't call browser");
