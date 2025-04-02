@@ -2,6 +2,7 @@ import { DataDefinitionError, ImplementationError } from '../../Error.js';
 import { NamespaceSource, ShortcutSearchKeyMap } from '../Environment.js';
 import { NamespaceDispatcher, NamespaceSourceHandler } from '../namespaces/NamespaceDispatcher.js';
 import { ObjectShortcutDatabase } from './ObjectShortcutDatabase.js';
+import { test, expect } from 'vitest';
 
 const firstDummyShortcut = {
   title: 'First dummy shortcut',

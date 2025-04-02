@@ -1,4 +1,5 @@
 import { ArgumentPlaceholderProcessor } from './ArgumentPlaceholderProcessor.js';
+import { test, expect } from 'vitest';
 
 test('process replaces simple argument', () => {
   const processor = new ArgumentPlaceholderProcessor();

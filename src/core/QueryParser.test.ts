@@ -1,4 +1,5 @@
 import { QueryParser } from './QueryParser.js';
+import { test, expect } from 'vitest';
 
 test('parse trims excess spaces in arguments', () => {
   const query = 'bvg Berlin, Alexanderplatz';

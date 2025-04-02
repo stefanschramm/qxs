@@ -1,4 +1,5 @@
 import { UrlProcessor } from './UrlProcessor.js';
+import { test, expect } from 'vitest';
 
 test('process replaces argument placeholders', () => {
   const urlProcessor = new UrlProcessor('en', 'de');

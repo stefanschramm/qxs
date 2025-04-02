@@ -9,6 +9,7 @@ import { InPlaceNamespaceSourceHandler } from './namespaces/InPlaceNamespaceSour
 import { UrlNamespaceSourceHandler } from './namespaces/UrlNamespaceSourceHandler.js';
 import { GithubNamespaceSourceHandler } from './namespaces/GithubNamespaceSourceHandler.js';
 import { ObjectShortcutDatabase } from './database/ObjectShortcutDatabase.js';
+import { test, expect } from 'vitest';
 
 test('process known keyword', async () => {
   const result = await getQueryProcessor().process('bvg Hermannplatz, Alexanderplatz');

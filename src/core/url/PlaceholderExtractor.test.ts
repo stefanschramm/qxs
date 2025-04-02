@@ -1,4 +1,5 @@
 import { getPlaceholders, PlaceholderType } from './PlaceholderExtractor';
+import { test, expect } from 'vitest';
 
 test('gets argument placeholders', () => {
   const result = getPlaceholders('https://www.bvg.de/de/verbindungen/verbindungssuche?S=<Start>&Z=<Ziel>&start=1');

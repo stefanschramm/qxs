@@ -1,5 +1,6 @@
 import { DataDefinitionError } from '../../Error.js';
 import { VariablePlaceholderProcessor } from './VariablePlaceholderProcessor.js';
+import { test, expect } from 'vitest';
 
 test('process replaces language', () => {
   const processor = new VariablePlaceholderProcessor('en', 'de');
