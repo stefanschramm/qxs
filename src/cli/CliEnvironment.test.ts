@@ -1,7 +1,6 @@
 import { CliConfig } from './CliConfig.js';
 import { CliEnvironment } from './CliEnvironment.js';
 import { test, expect } from 'vitest';
-import { test, expect } from 'vitest';
 
 const testCliConfig: CliConfig = {
   namespaces: ['o', 'aa', '.bb'],
